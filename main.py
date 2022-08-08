@@ -142,6 +142,20 @@ def evergreen_schedule(worker, schedule):
                 shifts.append([day, [begin, end], " @ Evergreen", hours[begin], reason])
                 total_hours += hours[end] - hours[begin]
 
+            elif shift == shift and ("/" in shift):
+                if shift.split("/", 1)[0].lower() == worker.lower() or shift.split("/", 1)[1].lower() == worker.lower():
+                    day = days[dayIX - 1]
+                    time = schedule.iloc[timeIX, 0]
+                    begin = time.split(" - ", 1)[0]
+                    begin = begin[:-2] + ":00" + begin[-2:]
+                    end = time.split(" - ", 1)[1]
+                    end = end[:-2] + ":00" + end[-2:]
+
+                    reason = ""
+
+                    shifts.append([day, [begin, end], " @ Evergreen", hours[begin], reason])
+                    total_hours += hours[end] - hours[begin]
+
     for dayIX in days:
         shiftIX = 0
         while shiftIX < (len(shifts) - 1):
@@ -289,10 +303,9 @@ Beep-Boop. I am a bot created by Blake Gella. If you notice any errors, please c
     s.login("glitchimmunitybot@gmail.com", password)
     for deskerIX in deskers:
         deskerIX = deskerIX.capitalize()
-        start = f"""
-Good afternoon {deskerIX},
+        start = f"""Good afternoon {deskerIX},
 
-I am a bot made by Blake Gella. I am here to report on your schedule for the next week!\n"""
+I am a bot created by Blake Gella. I am here to report on your correct schedule for the next week!\n"""
         print("Creating Message")
         message, cal = list_schedule(deskerIX, df, edf, search_end)
         print("Message Created. Creating Email")
