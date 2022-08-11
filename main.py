@@ -40,6 +40,7 @@ hours = {
     "12:00AM": 24,
     "1:00AM": 25,
     "2:00AM": 26,
+    "3:00AM": 27,
 }
 
 def create_calendar_event(shift, daydict):
@@ -51,8 +52,8 @@ def create_calendar_event(shift, daydict):
     else:
         event.add('summary', 'DDFD Shift')
 
-    start_time = datetime.strptime(daydict[shift[0]] + " " + shift[1].split('-')[0], '%m/%d/%y %I:%M%p')
-    end_time = datetime.strptime(daydict[shift[0]] + " " + shift[1].split('-')[1], '%m/%d/%y %I:%M%p')
+    start_time = datetime.strptime(daydict[shift[0]] + " " + shift[1].split('-')[0], '%m/%d/%Y %I:%M%p')
+    end_time = datetime.strptime(daydict[shift[0]] + " " + shift[1].split('-')[1], '%m/%d/%Y %I:%M%p')
 
     if end_time < start_time and "Evergreen" in shift[2]:
         end_time += timedelta(days=1)
@@ -122,7 +123,10 @@ def evergreen_schedule(worker, schedule):
     worker_space = worker + " "
 
     for dayIX in range(1, 8):
-        for timeIX in range(0, 19):
+        for timeIX in range(0, 7):
+            timeIX = timeIX * 3
+            if timeIX == 18:
+                timeIX += 1
             shift = schedule.iloc[timeIX, dayIX]
             if shift == shift and (worker.lower() == shift.lower()
                                    or (worker_space.lower() in shift.lower()
@@ -216,7 +220,7 @@ def list_schedule(worker, df, edf, s_e):
                 total_hours += hours[end] - hours[begin]
 
     # Get Evergreen Schedule
-    eschedule = edf.iloc[1:20, 0:8]
+    eschedule = edf.iloc[1:21, 0:8]
     eshifts, ehours = evergreen_schedule(worker, eschedule)
     shifts += eshifts
     total_hours += ehours
@@ -305,7 +309,7 @@ Beep-Boop. I am a bot created by Blake Gella. If you notice any errors, please c
         deskerIX = deskerIX.capitalize()
         start = f"""Good afternoon {deskerIX},
 
-I am a bot created by Blake Gella. I am here to report on your correct schedule for the next week!\n"""
+I am a bot created by Blake Gella. I am here to report on your schedule for the next week!\n"""
         print("Creating Message")
         message, cal = list_schedule(deskerIX, df, edf, search_end)
         print("Message Created. Creating Email")
