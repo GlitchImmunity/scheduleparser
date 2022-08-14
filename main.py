@@ -298,8 +298,7 @@ Sincerely,
 Glitch Bot
 
 P.S.
-I have included a .ics file that will import to any calendar! If you are on an iPhone, please open
-this email in the Apple mail app to import the events.
+I have included a .ics file that will import to any calendar! If you are on an iPhone, please open this email in the Apple mail app to import the events.
 ------------------------------------------------
 Beep-Boop. I am a bot created by Blake Gella. If you notice any errors, please contact Blake ASAP!"""
 
