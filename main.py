@@ -51,13 +51,14 @@ def create_calendar_event(shift, daydict):
         event.add('summary', 'Special Shift @ DDFD')
     else:
         event.add('summary', 'DDFD Shift')
-
     start_time = datetime.strptime(daydict[shift[0]] + " " + shift[1].split('-')[0], '%m/%d/%Y %I:%M%p')
     end_time = datetime.strptime(daydict[shift[0]] + " " + shift[1].split('-')[1], '%m/%d/%Y %I:%M%p')
 
     if end_time < start_time and "Evergreen" in shift[2]:
         end_time += timedelta(days=1)
-    elif end_time < start_time and "DDFD" in shift[2]:
+    elif "DDFD" in shift[2] and "8:45PM" in shift[1]:
+        end_time += timedelta(days=1)
+    elif "DDFD" in shift[2] and "11:45PM" in shift[1]:
         start_time -= timedelta(days=1)
 
     event.add('dtstart', start_time)
@@ -298,7 +299,7 @@ Sincerely,
 Glitch Bot
 
 P.S.
-I have included a .ics file that will import to any calendar! If you are on an iPhone, please open
+I have included a .ics file that will import  to any calendar! If you are on an iPhone, please open
 this email in the Apple mail app to import the events.
 ------------------------------------------------
 Beep-Boop. I am a bot created by Blake Gella. If you notice any errors, please contact Blake ASAP!"""
@@ -309,13 +310,13 @@ Beep-Boop. I am a bot created by Blake Gella. If you notice any errors, please c
         deskerIX = deskerIX.capitalize()
         start = f"""Good afternoon {deskerIX},
 
-I am a bot created by Blake Gella. I am here to report on your schedule for the next week!\n"""
+I am a bot created by Blake Gella. I am resending the email to update for switched shifts and a potential bug for the .ics file.\n"""
         print("Creating Message")
         message, cal = list_schedule(deskerIX, df, edf, search_end)
         print("Message Created. Creating Email")
 
         msg = MIMEMultipart()
-        msg['Subject'] = f"Schedule Delivery for {week}!"
+        msg['Subject'] = f"Updated Schedule Delivery for {week}!"
         msg['From'] = 'glitchimmunitybot@gmail.com'
         msg['To'] = deskers[deskerIX]
 
